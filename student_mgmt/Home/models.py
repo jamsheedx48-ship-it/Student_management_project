@@ -20,7 +20,6 @@ class Course(models.Model):
     title=models.CharField(max_length=100,default='Untitled')
     description=models.TextField(default='No description')
     price=models.IntegerField(default=0)
-    image=models.ImageField(upload_to='course_images/',blank=True,null=True)
 
 class Purchase(models.Model):
     user= models.ForeignKey(User,on_delete=models.CASCADE,null=True,blank=True)

@@ -15,21 +15,24 @@
     <div class="row">
 
         <div class="col-md-4">
-            <div class="card shadow-sm p-3 text-center">
+            <div class="card shadow-sm p-3 text-center btn btn-info">
                 <h5>Total Students</h5>
                 <h3>{{ total_students }}</h3>
             </div>
         </div>
 
-        <div class="col-md-4">
-            <div class="card shadow-sm p-3 text-center">
+        <div class="col-md-4" >
+            <a href="{% url 'admin_courses' %}" class='text-decoration-none'>
+                <div class="card shadow-sm p-3 text-center btn btn-info">
                 <h5>Total Courses</h5>
                 <h3>{{ total_courses }}</h3>
             </div>
+            </a>
         </div>
+        
 
         <div class="col-md-4">
-            <div class="card shadow-sm p-3 text-center">
+            <div class="card shadow-sm p-3 text-center btn btn-info">
                 <h5>Total Purchases</h5>
                 <h3>{{ total_purchases }}</h3>
             </div>
@@ -55,6 +58,7 @@
                     <th>Roll No</th>
                     <th>Education</th>
                     <th>Year</th>
+                    <th>DOB</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -70,9 +74,17 @@
                     <td class="fw-semibold">{{ student.studentprofile.roll_number}}</td>
                     <td class="fw-semibold">{{ student.studentprofile.education}}</td>
                     <td class="fw-semibold">{{ student.studentprofile.year_of_admission}}</td>
+                    <td class="fw-semibold">{{ student.studentprofile.date_of_birth}}</td>
                     <td>
                       <a href="{% url 'edit_student' student.id %}" class="btn btn-sm btn-outline-primary">Edit</a>
-                      {% comment %} <a href="{% url 'delete_student' student.id %}" class="btn btn-sm btn-outline-danger">Delete</a> {% endcomment %}
+
+                      <form action="{% url 'delete_student' student.id %}" method='POST'class="d-inline">
+                        {% csrf_token %}
+                        <button class="btn btn-sm btn-outline-danger" type='submit'>
+                           Delete
+                        </button>
+
+                      </form>
                     </td>
                 </tr>
                 {% empty %}

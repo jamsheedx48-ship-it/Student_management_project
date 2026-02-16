@@ -1,5 +1,5 @@
 from django import forms
-from .models import StudentProfile
+from .models import StudentProfile,Course
 class ProfileUpdateForm(forms.ModelForm):
     email=forms.EmailField(
         required=False,
@@ -21,3 +21,8 @@ class ProfileUpdateForm(forms.ModelForm):
             'profile_pic':forms.FileInput(attrs={'class':'form-control'})
         }
         
+
+class CourseForm(forms.ModelForm):
+    class Meta:
+        model=Course
+        fields='__all__'

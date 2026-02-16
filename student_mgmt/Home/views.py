@@ -1,7 +1,8 @@
 from django.shortcuts import render,redirect
+from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from .models import StudentProfile,Course,Purchase
-from .forms import ProfileUpdateForm
+from .forms import ProfileUpdateForm,CourseForm
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 User=get_user_model()
@@ -97,24 +98,101 @@ def admin_dashboard(request):
     }
     return render(request,'admin.html',context)
 
+@login_required(login_url='login')
 def edit_student(request,id):
-    student=StudentProfile.objects.get(id=id)
+    if request.user.role != 'admin':
+        return redirect('index')
+
+    user=User.objects.get(id=id)
+    profile,_=StudentProfile.objects.get_or_create(user=user)
 
     if request.method=='POST':
-        form=ProfileUpdateForm(request.POST,request.FILES,instance=student)
+        form=ProfileUpdateForm(request.POST,request.FILES,instance=profile)
         if form.is_valid():
             profile=form.save(commit=False)
 
-            request.user.email=form.cleaned_data['email']
-            request.user.save()
+            user.email=form.cleaned_data['email']
+            user.save()
 
             profile.save()
             messages.success(request,'Profile updted')
             return redirect('profile')
     else:
         form=ProfileUpdateForm(
-            instance=student,
-            initial={'email':request.user.email}
+            instance=profile,
+            initial={'email':user.email}
             )
     return render(request,'edit_student.html',{'form':form})
+
+@login_required(login_url='login') 
+def delete_student(request,id):
+    if request.user.role != 'admin':
+        return redirect('index')
     
+    user= User.objects.get(id=id)
+    if request.method=='POST':
+        user.delete()
+        messages.success(request,'Student deleted')
+        return redirect('admin_dashboard')
+    
+@login_required(login_url='login')
+def admin_courses(request):
+    if request.user.role != 'admin':
+        return redirect('index')
+    courses=Course.objects.all().order_by('-id')
+
+    return render(request,'admin_courses.html',{
+        'courses':courses
+    })
+
+def add_course(request):
+    if request.user.role != 'admin':
+        return redirect('index')
+    if request.method=='POST':
+        form=CourseForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request,'Course Added Successfully')
+            return redirect('admin_courses')
+
+    form=CourseForm()
+    return render(request,'add_course.html',{
+        'form':form
+    })
+    
+def edit_course(request,id):
+    if request.user.role != 'admin':
+        return redirect('index')
+    
+    course=Course.objects.get(id=id)
+    if request.method=='POST':
+        form=CourseForm(request.POST , instance=course)
+        if form.is_valid():
+            form.save()
+            messages.success(request,'Course Updated')
+            return redirect('admin_courses')
+
+    form=CourseForm(instance=course)
+    return render(request,'edit_courses.html',{
+        'form':form
+    })
+
+def delete_course(request,id):
+    if request.user.role != 'admin':
+        return redirect('index')
+    
+    if request.method=='POST':
+        course=Course.objects.get(id=id)
+        course.delete()
+        messages.success(request,'Course Deleted')
+        return redirect('admin_courses')
+
+def course_detail(request,id):
+    if request.user.role != 'admin':
+        return redirect('index')
+    
+    course=Course.objects.get(id=id)
+
+    return render(request,'course_detail.html',{
+        'course':course
+    })
