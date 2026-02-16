@@ -1,0 +1,7 @@
+.carousel-img{
+    height: 350px;        /* change this value */
+    object-fit: cover;    /* keeps image clean */
+}
+body{
+    padding-bottom: 80px;
+}

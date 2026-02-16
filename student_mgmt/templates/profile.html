@@ -1,8 +1,68 @@
 {% extends 'base.html' %}
+
 {% block title %}
 Profile
 {% endblock %}
 
 {% block content %}
-<h2>Profile page</h2>
+<div class="container mt-4">
+
+    <h4 class="fw-bold text-primary">
+        <i class="bi bi-mortarboard-fill"></i> Student Profile
+    </h4>
+
+    <div class="card shadow-lg border-0 mt-3">
+
+        <!-- Header -->
+        <div class="card-header bg-primary text-white fw-semibold">
+            <i class="bi bi-person-circle"></i> My Profile
+        </div>
+
+        <!-- Body -->
+        <div class="card-body">
+
+            <div class="row align-items-center">
+
+                <!-- Profile Image -->
+                   <div class="col-md-3 text-center">
+                    
+   
+        <img src="{{ student.profile_pic.url}}" 
+             class="rounded-circle shadow" 
+             style="width: 120px; height: 120px; object-fit: cover;">
+    
+</div>
+
+                <!-- Profile Details -->
+                <div class="col-md-9">
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <p><strong>Username</strong><br>{{ request.user.username }}</p>
+                            <p><strong>Roll Number</strong><br>{{ student.roll_number }}</p>
+                            <p><strong>Year of Admission</strong><br>{{ student.year_of_admission }}</p>
+                        </div>
+
+                        <div class="col-md-6">
+                            <p><strong>Email</strong><br>{{ request.user.email }}</p>
+                            <p><strong>Education</strong><br>{{ student.education }}</p>
+                            <p><strong>Date of Birth</strong><br>{{ student.date_of_birth}}</p>
+                        </div>
+
+                    </div>
+
+                    <a href="{% url 'edit_profile'%}" class="btn btn-primary btn-sm">
+                        Edit Profile
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
 {% endblock %}

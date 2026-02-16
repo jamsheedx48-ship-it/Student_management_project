@@ -1,0 +1,56 @@
+{% extends 'base.html'%}
+{% block title %}Edit profile{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5 container mt-5 pb-5">
+    <div class="card shadow-lg mx-auto" style="max-width:600px;">
+        
+        <div class="card-header bg-primary text-white">
+            Edit Profile
+        </div>
+
+        <div class="card-body">
+
+            <form method="POST" enctype='multipart/form-data'>
+                {% csrf_token %}
+
+                <div class="mb-3">
+                    <label class="form-label">Profile Picture</label>
+                    {{ form.profile_pic }}
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Email</label>
+                    {{ form.email }}
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Roll number</label>
+                    {{ form.roll_number }}
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Education</label>
+                    {{ form.education }}
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Year of Admission</label>
+                    {{ form.year_of_admission }}
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Date of Birth</label>
+                    {{ form.date_of_birth }}
+                </div>
+
+                <button class="btn btn-primary w-100">
+                    Update Profile
+                </button>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

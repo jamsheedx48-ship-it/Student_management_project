@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}My Courses{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+    <h3 class="mb-4">My Courses</h3>
+
+    <div class="row">
+
+        {% for purchase in purchases %}
+        <div class="col-md-4">
+            <div class="card shadow mb-4">
+                <div class="card-body">
+
+                    <h5>{{ purchase.course.title }}</h5>
+                    <p>{{ purchase.course.description }}</p>
+
+                    
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p>You haven't purchased any courses yet.</p>
+        {% endfor %}
+
+    </div>
+</div>
+
+{% endblock %}

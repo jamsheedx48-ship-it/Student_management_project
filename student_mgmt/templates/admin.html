@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <!-- Page Title -->
+    <div class="mb-4">
+        <h3>Admin Dashboard</h3>
+        <p class="text-muted">Manage courses, users and purchases</p>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="row">
+
+        <div class="col-md-4">
+            <div class="card shadow-sm p-3 text-center">
+                <h5>Total Students</h5>
+                <h3>{{ total_students }}</h3>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm p-3 text-center">
+                <h5>Total Courses</h5>
+                <h3>{{ total_courses }}</h3>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm p-3 text-center">
+                <h5>Total Purchases</h5>
+                <h3>{{ total_purchases }}</h3>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- student list -->
+    <div class="card shadow-lg border-0 mt-4">
+    
+    <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Students List</h5>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0 text-center">
+            
+            <thead class="table-light">
+                <tr>
+                     <th>#</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Roll No</th>
+                    <th>Education</th>
+                    <th>Year</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for student in students %}
+                <tr>
+                    <td class="fw-semibold">{{ forloop.counter }}</td>
+                    <td>
+                        <span class="fw-semibold">{{ student.username }}</span>
+                    </td>
+                    <td class="text-muted">{{ student.email }}</td>
+                    <td class="fw-semibold">{{ student.studentprofile.roll_number}}</td>
+                    <td class="fw-semibold">{{ student.studentprofile.education}}</td>
+                    <td class="fw-semibold">{{ student.studentprofile.year_of_admission}}</td>
+                    <td>
+                      <a href="{% url 'edit_student' student.id %}" class="btn btn-sm btn-outline-primary">Edit</a>
+                      {% comment %} <a href="{% url 'delete_student' student.id %}" class="btn btn-sm btn-outline-danger">Delete</a> {% endcomment %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3" class="py-4 text-muted">
+                        No students found
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+
+        </table>
+    </div>
+
+</div>
+
+
+</div>
+
+{% endblock %}
