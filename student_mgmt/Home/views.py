@@ -1,13 +1,16 @@
 from django.shortcuts import render,redirect
-from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from .models import StudentProfile,Course,Purchase
 from .forms import ProfileUpdateForm,CourseForm
 from django.contrib import messages
+from django.shortcuts import get_object_or_404
+from django.views.decorators.cache import never_cache
 from django.contrib.auth import get_user_model
 User=get_user_model()
 
 # Create your views here.
+
+@never_cache
 @login_required(login_url='login')
 def index(request):
     
@@ -16,6 +19,7 @@ def index(request):
 
     return render(request,'home.html')
 
+@never_cache
 @login_required(login_url='login')
 def profile(request):
     if request.user.role=='admin':
@@ -23,6 +27,8 @@ def profile(request):
     student,_=StudentProfile.objects.get_or_create(user=request.user)
 
     return render(request,'profile.html',{'student':student})
+
+@never_cache
 @login_required(login_url='login')
 def edit_profile(request):
     if request.user.role=='admin':
@@ -47,10 +53,14 @@ def edit_profile(request):
     )
     return render(request,'editprofile.html',{'form':form})
 
+@never_cache
+@login_required(login_url='login')
 def about(request):
     if request.user.role=='admin':
         return redirect('admin_dashboard')
     return render(request,'about.html')
+
+@never_cache
 @login_required
 def courses(request):
     if request.user.role=='admin':
@@ -62,11 +72,13 @@ def courses(request):
         'courses':courses,
         'purchased_ids':purchased_ids
     })
+
+@never_cache
 @login_required
 def buy_course(request,id):
     if request.user.role=='admin':
         return redirect('admin_dashboard')
-    course=Course.objects.get(id=id)
+    course = get_object_or_404(Course, id=id)
 
     if not Purchase.objects.filter(user=request.user,course=course).exists():
         Purchase.objects.create(user=request.user,course=course)
@@ -74,6 +86,8 @@ def buy_course(request,id):
     else:
         messages.error(request,'You already purchased thi course')    
     return redirect('courses')
+
+@never_cache
 @login_required
 def my_courses(request):
     if request.user.role=='admin':
@@ -81,6 +95,7 @@ def my_courses(request):
     purchases=Purchase.objects.filter(user=request.user)
     return render(request,'mycourses.html',{'purchases':purchases})
 
+@never_cache
 @login_required(login_url='login')
 def admin_dashboard(request):
     if request.user.role!='admin':
@@ -98,12 +113,13 @@ def admin_dashboard(request):
     }
     return render(request,'admin.html',context)
 
+@never_cache
 @login_required(login_url='login')
 def edit_student(request,id):
     if request.user.role != 'admin':
         return redirect('index')
 
-    user=User.objects.get(id=id)
+    user = get_object_or_404(User, id=id)
     profile,_=StudentProfile.objects.get_or_create(user=user)
 
     if request.method=='POST':
@@ -116,7 +132,7 @@ def edit_student(request,id):
 
             profile.save()
             messages.success(request,'Profile updted')
-            return redirect('profile')
+            return redirect('admin_dashboard')
     else:
         form=ProfileUpdateForm(
             instance=profile,
@@ -124,17 +140,22 @@ def edit_student(request,id):
             )
     return render(request,'edit_student.html',{'form':form})
 
+@never_cache
 @login_required(login_url='login') 
 def delete_student(request,id):
     if request.user.role != 'admin':
         return redirect('index')
     
-    user= User.objects.get(id=id)
+    user = get_object_or_404(User, id=id)
     if request.method=='POST':
         user.delete()
         messages.success(request,'Student deleted')
         return redirect('admin_dashboard')
     
+    return redirect('admin_dashboard')
+
+    
+@never_cache    
 @login_required(login_url='login')
 def admin_courses(request):
     if request.user.role != 'admin':
@@ -145,6 +166,8 @@ def admin_courses(request):
         'courses':courses
     })
 
+@never_cache
+@login_required(login_url='login')
 def add_course(request):
     if request.user.role != 'admin':
         return redirect('index')
@@ -160,11 +183,13 @@ def add_course(request):
         'form':form
     })
     
+@never_cache    
+@login_required(login_url='login')
 def edit_course(request,id):
     if request.user.role != 'admin':
         return redirect('index')
     
-    course=Course.objects.get(id=id)
+    course = get_object_or_404(Course, id=id)
     if request.method=='POST':
         form=CourseForm(request.POST , instance=course)
         if form.is_valid():
@@ -177,21 +202,26 @@ def edit_course(request,id):
         'form':form
     })
 
+@never_cache
+@login_required(login_url='login')
 def delete_course(request,id):
     if request.user.role != 'admin':
         return redirect('index')
     
     if request.method=='POST':
-        course=Course.objects.get(id=id)
+        course = get_object_or_404(Course, id=id)
         course.delete()
         messages.success(request,'Course Deleted')
         return redirect('admin_courses')
+    return redirect('admin_courses')
 
+@never_cache
+@login_required(login_url='login')
 def course_detail(request,id):
     if request.user.role != 'admin':
         return redirect('index')
     
-    course=Course.objects.get(id=id)
+    course = get_object_or_404(Course, id=id)
 
     return render(request,'course_detail.html',{
         'course':course

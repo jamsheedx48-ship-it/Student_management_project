@@ -29,9 +29,11 @@
             <div class="mt-3">
                 {% if messages %}
              {% for message in messages%}
+               {% if 'error' and 'success' in message.tags %}
                <div class="alert alert-danger">
                  {{message}}
                </div>
+               {%endif%}
              {% endfor %}
             {% endif %}
             </div>

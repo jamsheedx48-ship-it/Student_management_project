@@ -58,9 +58,8 @@ Home
         <div class="card shadow-sm text-center h-100">
             <div class="card-body">
                 <h5 class="card-title">My Courses</h5>
-                <p class="card-text">
-                    View all the courses you have purchased.
-                </p>
+                <img src="{% static 'images/my.png' %}" class="card-img-top card-img-fixed">
+                
                 <a href="{%url 'my_courses'%}" class="btn btn-primary">
                     View Courses
                 </a>
@@ -71,11 +70,10 @@ Home
     <!-- Explore Courses Card -->
     <div class="col-md-4">
         <div class="card shadow-sm text-center h-100">
+
             <div class="card-body">
                 <h5 class="card-title">Explore Courses</h5>
-                <p class="card-text">
-                    Discover new courses and start learning today.
-                </p>
+                <img src="{% static 'images/courses.png' %}" class="card-img-top card-img-fixed">
                 <a href="{% url 'courses' %}" class="btn btn-success">
                     Explore
                 </a>
@@ -88,9 +86,8 @@ Home
         <div class="card shadow-sm text-center h-100">
             <div class="card-body">
                 <h5 class="card-title">My Profile</h5>
-                <p class="card-text">
-                    Update your profile and account settings.
-                </p>
+                <img src="{% static 'images/profile.png' %}" class="card-img-top card-img-fixed">
+                
                 <a href="profile" class="btn btn-dark">
                     Go Profile
                 </a>

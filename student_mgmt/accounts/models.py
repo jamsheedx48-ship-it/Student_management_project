@@ -8,4 +8,4 @@ class CustomUser(AbstractUser):
         ('student','Student')
     )
 
-    role= models.CharField(max_length=10,choices=ROLES)
+    role= models.CharField(max_length=10,choices=ROLES).
